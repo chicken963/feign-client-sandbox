@@ -11,7 +11,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
-public class PingInfoClientTest {
+public class ClientTest {
 
     private final ClientProvider<TestControllerApi> provider = new ClientProvider(TestControllerApi.class);
     private final Deserializer<Instant> instantDeserializer = new InstantDeserializer();
