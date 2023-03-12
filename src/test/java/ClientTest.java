@@ -1,4 +1,8 @@
 import com.iagcargo.ruleengine.controller.RuleEngineControllerApi;
+import com.iagcargo.ruleengine.dto.routeavailabilityrequest.BookingDto;
+import com.iagcargo.ruleengine.dto.routeavailabilityrequest.CargoServiceHeaderDto;
+import com.iagcargo.ruleengine.dto.routeavailabilityrequest.RouteAvailabilityRequestDto;
+import com.iagcargo.ruleengine.dto.routeavailabilityrequest.RouteParametersDto;
 import com.iagcargo.ruleengine.dto.rule.*;
 import feign.FeignException;
 import org.example.client.ClientProvider;
@@ -75,6 +79,16 @@ public class ClientTest {
         feignClient.assertValid(plan);
     }
 
+    @Test
+    public void shouldApply() {
+        RouteAvailabilityRequestDto availabilityRequest = prepareRouteAvailabilityRequest();
+        try {
+            feignClient.apply(availabilityRequest);
+        } catch (FeignException e) {
+            assertEquals(500, e.status());
+        }
+    }
+
     private RulesEnginePlanDto preparePlan() {
         RulesEnginePlanDto plan = new RulesEnginePlanDto();
         plan.setName("New Name");
@@ -103,5 +117,24 @@ public class ClientTest {
         sortAction.setParams(Arrays.asList("d", "e", "f"));
 
         return Arrays.asList(insertAction, sortAction);
+    }
+
+    private RouteAvailabilityRequestDto prepareRouteAvailabilityRequest() {
+        RouteAvailabilityRequestDto availabilityRequest = new RouteAvailabilityRequestDto();
+        availabilityRequest.setCargoServiceHeader(new CargoServiceHeaderDto());
+        availabilityRequest.setRouteParameters(prepareRouteParameters());
+        availabilityRequest.setBookingDto(new BookingDto());
+        return availabilityRequest;
+    }
+
+    private RouteParametersDto prepareRouteParameters() {
+        RouteParametersDto parameters = new RouteParametersDto();
+        parameters.setCheckRate(true);
+        parameters.setDepartureDate(new Date());
+        parameters.setCheckCapacity(false);
+        parameters.setProduct("product A");
+        parameters.setMaxRoute(2);
+        parameters.setRequestedVolume(33.0);
+        return parameters;
     }
 }
