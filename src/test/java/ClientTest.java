@@ -69,6 +69,12 @@ public class ClientTest {
         assertEquals(1, plan.getRules().size());
     }
 
+    @Test
+    public void shouldAssertValid() {
+        RulesEnginePlanDto plan = preparePlan();
+        feignClient.assertValid(plan);
+    }
+
     private RulesEnginePlanDto preparePlan() {
         RulesEnginePlanDto plan = new RulesEnginePlanDto();
         plan.setName("New Name");
